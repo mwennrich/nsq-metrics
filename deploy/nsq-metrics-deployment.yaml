@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nsq-metrics
+  labels:
+    app: nsq-metrics
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nsq-metrics
+  template:
+    metadata:
+      labels:
+        app: nsq-metrics
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: nsq-metrics
+          command:
+            - /nsq-metrics
+          args:
+            - start
+          image: ghcr.io/mwennrich/nsq-metrics:latest
+          ports:
+            - containerPort: 9117
+              name: metrics
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+          env:
+            - name: NSQ_METRICS_NSQD_ADDRESS
+              value: "nsqd:4151"
+            # - name: NSQ_METRICS_ENABLED_COLLECTORS
+            #   value: "stats.topics,stats.channels,stats.clients,stats.producers"

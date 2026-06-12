@@ -27,9 +27,6 @@ const (
 	nsqdURLEnv           = prefix + "_NSQD_ADDRESS"
 	enabledCollectorsEnv = prefix + "_ENABLED_COLLECTORS"
 	namespaceEnv         = prefix + "_NAMESPACE"
-	tlsCACertEnv         = prefix + "_TLS_CA_CERT"
-	tlsCertEnv           = prefix + "_TLS_CERT"
-	tlsKeyEnv            = prefix + "_TLS_KEY"
 
 	// Default values for flags and env
 	defaultListenAddress     = ":9117"
@@ -102,7 +99,7 @@ func createNsqExecutor() (*collector.NsqExecutor, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	for _, param := range strings.Split(*enabledCollectors, ",") {
+	for param := range strings.SplitSeq(*enabledCollectors, ",") {
 		param = strings.TrimSpace(param)
 		parts := strings.SplitN(param, ".", 2)
 		if len(parts) != 2 {

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nsq-metrics
+  labels:
+    app: nsq-metrics
+spec:
+  ports:
+    - name: metrics
+      port: 9117
+      targetPort: metrics
+  selector:
+    app: nsq-metrics

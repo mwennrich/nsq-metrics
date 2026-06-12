@@ -1,22 +1,20 @@
-BUILD_DIR = build
+APP_NAME := nsq-metrics
+DOCKER_REGISTRY ?= docker.io/mwennrich
+DOCKER_TAG := $(or ${GIT_TAG_NAME}, latest)
 
-GO       = go
-GOX      = gox
-GOX_ARGS = -output="$(BUILD_DIR)/{{.Dir}}_{{.OS}}_{{.Arch}}" -osarch="linux/amd64 linux/arm linux/arm64 darwin/amd64 darwin/arm64 windows/amd64"
+.PHONY: tidy build run docker-build
 
-.PHONY: build
+tidy:
+	go mod tidy
+
 build:
-	$(GO) build -o $(BUILD_DIR)/nsq-metrics .
+	go build ./...
 
-.PHONY: clean
-clean:
-	rm -R $(BUILD_DIR)/* || true
+run:
+	go run ./agent.go
 
-.PHONY: test
-test:
-	$(GO) test ./...
+docker-build:
+	@docker build -t $(DOCKER_REGISTRY)/$(APP_NAME):$(DOCKER_TAG) .
 
-.PHONY: release-build
-release-build:
-	@go install github.com/mitchellh/gox@latest
-	@$(GOX) $(GOX_ARGS) github.com/spiegeltechlab/nsq-metrics
+docker-push: docker-build
+	@docker push $(DOCKER_REGISTRY)/$(APP_NAME):$(DOCKER_TAG)

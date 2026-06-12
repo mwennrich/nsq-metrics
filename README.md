@@ -21,9 +21,6 @@ NSQ_METRICS_WEB_PATH | web.path | Path under which to expose metrics. | /metrics
 NSQ_METRICS_NSQD_ADDRESS | nsqd.address | Address of the nsqd node. | http://localhost:4151/stats
 NSQ_METRICS_ENABLED_COLLECTORS | collectors | Comma-separated list of collectors to use. See collectors below for possible values | stats.topics,stats.channels
 NSQ_METRICS_NAMESPACE | namespace | Namespace for the NSQ metrics. | nsq
-NSQ_METRICS_TLS_CA_CERT | tls.ca-cert | CA certificate file to be used for nsqd connections. | ""
-NSQ_METRICS_TLS_CERT | tls.cert | TLS certificate file to be used for client connections to nsqd. | ""
-NSQ_METRICS_TLS_KEY | tls.key | TLS key file to be used for TLS client connections to nsqd. | ""
 
 ## Collectors for ENABLED_COLLECTORS or collectors config
 
