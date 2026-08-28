@@ -118,9 +118,10 @@ type client struct {
 
 func getPercentile(t *topic, percentile int) float64 {
 	if len(t.E2eLatency.Percentiles) > 0 {
-		if percentile == 99 {
+		switch percentile {
+		case 99:
 			return t.E2eLatency.Percentiles[0]["value"]
-		} else if percentile == 95 {
+		case 95:
 			return t.E2eLatency.Percentiles[1]["value"]
 		}
 	}
@@ -132,7 +133,10 @@ func getNsqdStats(client *http.Client, nsqdURL string) (*stats, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	defer func() {
+		// Closing is best-effort; the response has already been fully decoded.
+		_ = resp.Body.Close()
+	}()
 
 	var st stats
 	if err = json.NewDecoder(resp.Body).Decode(&st); err != nil {
