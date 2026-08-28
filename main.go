@@ -72,7 +72,7 @@ func main() {
 	http.Handle(*metricsPath, promhttp.Handler())
 	if *metricsPath != "" && *metricsPath != "/" {
 		http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-			w.Write([]byte(`<html>
+			_, _ = w.Write([]byte(`<html>
 			<head><title>NSQ Exporter</title></head>
 			<body>
 			<h1>NSQ Exporter</h1>
